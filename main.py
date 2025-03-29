@@ -11,6 +11,11 @@ from docling.document_converter import DocumentConverter
 load_dotenv()
 
 API_TOKEN = os.getenv("API_TOKEN")
+PORT= os.getenv("PORT", 8000)
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.93 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"
+}
 
 app = FastAPI(title="Conversor HTML para Markdown")
 
@@ -34,7 +39,7 @@ def convert_url_to_markdown(payload: URLRequest):
     """
     # Try searching for the HTML content of the URL
     try:
-        response = requests.get(payload.url, timeout=10)
+        response = requests.get(payload.url, timeout=20, headers=headers)
         response.raise_for_status()
     except requests.RequestException as e:
         raise HTTPException(status_code=400, detail=f"Erro ao buscar a URL: {e}")
@@ -55,4 +60,4 @@ def convert_url_to_markdown(payload: URLRequest):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="0.0.0.0", port=PORT)
