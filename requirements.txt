@@ -1,8 +1,5 @@
-os
-dotenv
 docling
 fastapi
 pydantic
 requests
-io
 uvicorn
